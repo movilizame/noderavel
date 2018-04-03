@@ -1,0 +1,18 @@
+{
+  "name": "@movilizame/noderavel",
+  "version": "0.0.1",
+  "description": "Laravel-NodeJs Queue Sync",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon test.js"
+  },
+  "author": "Movilizame",
+  "license": "ISC",
+  "dependencies": {
+    "php-serialize": "^1.2.5",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}

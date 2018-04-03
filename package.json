@@ -9,10 +9,10 @@
   "author": "Movilizame",
   "license": "ISC",
   "dependencies": {
-    "php-serialize": "^1.2.5",
-    "redis": "^2.8.0"
+    "php-serialize": "^1.2.5"
   },
   "devDependencies": {
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.3",
+    "redis": "^2.8.0"
   }
 }

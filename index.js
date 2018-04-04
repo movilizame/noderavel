@@ -10,24 +10,15 @@ class Noderavel extends EventEmitter {
         this.client = client;
         this.scope = scope;
         this.queue = queue;
+    }
 
+    listen () {
         switch (this.driver) {
             case 'redis':
                 this.redisPop();
                 break;
         }
     }
-
-    // connect () {
-    //     switch (this.driver) {
-    //         case 'redis': 
-    //             const redis = require('redis');
-    //             const redisHost = this.options.host || '127.0.0.1';
-    //             const redisPort = this.options.port || '6379';
-    //             this.connection = redis.createClient(redisPort, redisHost); 
-    //             break;
-    //     }
-    // }
 
     redisPop () { 
         const pop = () => {
@@ -44,6 +35,37 @@ class Noderavel extends EventEmitter {
             }); 
         };
         pop();
+    }
+
+
+    /**
+     * { 
+     *      job: 'Illuminate\\Queue\\CallQueuedHandler@call',
+     *      data:
+     *       { commandName: 'STS\\Jobs\\TestJob',
+     *           command: 'O:16:"STS\\Jobs\\TestJob":5:{s:1:"a";s:4:"hola";s:1:"b";i:2;s:10:"connection";s:5:"redis";s:5:"queue";N;s:5:"delay";N;}' 
+     *       },
+     *       id: 'RV1rVtXMMAwHkYEgJN2Q5K3L9SzFpX4r',
+     *       attempts: 1 
+     *   }
+     */
+    redisPush (name, object) {
+        const command = Serialize.serialize(object);
+        let data = {
+            job: 'Illuminate\\Queue\\CallQueuedHandler@call',
+            data: {
+                commandName: name,
+                command
+            },
+            id: 'asd',
+            attempts: 1
+        };
+
+        this.client.rpush('queues:' + this.queue, JSON.stringify(data), (err, replay) => {
+            console.log(err, replay);
+        });
+        console.log(data);
+
     }
 
 }

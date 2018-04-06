@@ -1,7 +1,5 @@
-const Serialize = require('php-serialize');
-let redis = require('redis');
+const Serialize = require('php-serialize'); 
 const EventEmitter = require('events');
-
 
 class Noderavel extends EventEmitter {
     constructor ({ driver = 'redis', client, scope = {}, queue = 'default' }) {
@@ -20,11 +18,20 @@ class Noderavel extends EventEmitter {
         }
     }
 
+
+    push (name, object) {
+        switch (this.driver) {
+            case 'redis':
+                this.redisPush(name, object);
+                break;
+        }
+    }
+
     redisPop () { 
         const pop = () => {
             this.client.blpop('queues:' + this.queue, 60000, (err, replay) => {
                 if (err) {
-                    console.log('ERROR', err); 
+                    // Error!
                 } else { 
                     let obj = JSON.parse(replay[1]);
                     let command = obj.data.command;
@@ -37,34 +44,21 @@ class Noderavel extends EventEmitter {
         pop();
     }
 
-
-    /**
-     * { 
-     *      job: 'Illuminate\\Queue\\CallQueuedHandler@call',
-     *      data:
-     *       { commandName: 'STS\\Jobs\\TestJob',
-     *           command: 'O:16:"STS\\Jobs\\TestJob":5:{s:1:"a";s:4:"hola";s:1:"b";i:2;s:10:"connection";s:5:"redis";s:5:"queue";N;s:5:"delay";N;}' 
-     *       },
-     *       id: 'RV1rVtXMMAwHkYEgJN2Q5K3L9SzFpX4r',
-     *       attempts: 1 
-     *   }
-     */
     redisPush (name, object) {
-        const command = Serialize.serialize(object);
+        const command = Serialize.serialize(object, this.scope);
         let data = {
             job: 'Illuminate\\Queue\\CallQueuedHandler@call',
             data: {
                 commandName: name,
                 command
             },
-            id: 'asd',
+            id: Date.now(),
             attempts: 1
         };
 
         this.client.rpush('queues:' + this.queue, JSON.stringify(data), (err, replay) => {
-            console.log(err, replay);
+            // Queue pushed
         });
-        console.log(data);
 
     }
 

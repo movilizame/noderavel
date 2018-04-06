@@ -2,16 +2,21 @@
   "name": "@movilizame/noderavel",
   "version": "0.1.0",
   "description": "Laravel-NodeJs Queue Sync",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "nodemon test.js"
+    "test": "nodemon test.js",
+    "build": "npm run clean; babel src --out-dir lib",
+    "clean": "rm -rf lib"
   },
   "author": "Movilizame",
   "license": "ISC",
   "dependencies": {
-    "php-serialize": "^1.2.5"
+    "php-serialize": "^1.3.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
     "nodemon": "^1.17.3",
     "redis": "^2.8.0"
   }

@@ -1,6 +1,6 @@
 ## Noderavel
 
-Queue sync between NodeJS and Laravel using Redis driver. You can process Jobs dispatched from Laravel in NodeJS or biceversa. 
+Queue sync between NodeJS and Laravel using Redis driver. You can process Jobs dispatched from Laravel in NodeJS or vice versa. 
 
 ### Install
 
